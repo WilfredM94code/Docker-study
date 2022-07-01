@@ -1,0 +1,453 @@
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+-----------------------------------------------------------------
+
+Docker is a tool employed in software development used to manage 'containers'
+of applications. This is an open spurce tool widely employed through multitude
+of organizations.
+
+Docker manages 'containers' which are packages that allows to a software run 
+reliably from one computer to another solving compatibility issues between
+the versions and dependencies that may arise when executing a software
+in different environments. It provides solution to incompatibility between OS.
+
+It is used by global enterprises and particulars
+
+This tools allows to package software under the CI/CD software development 
+scheme
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+----------------------------- CI/CD -----------------------------
+-----------------------------------------------------------------
+
+CI/CD stands for Continuous Integrarion - Continuous Delivery and 
+Continuous Deployment. These in the scheme on which development teams
+work to provide software solutions. This steps are explained below:
+
+- Continuous Integrarion: consists in building features or solutions, testing 
+and merging them into the software controlled versions
+
+- Continuous Delivery: automatically sets the repository available once new
+changes on the software controlled versions are merged
+
+- Continuous Deployment: Deploys the new version automatically into production
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+------------------------ CI/CD and DevOps -----------------------
+-----------------------------------------------------------------
+
+DevOps stands for Development and Operations wich is a methodology and 
+philosophy of software development. It defines the life cicle of the 
+software development and considers comunication, cooperation and integration 
+between software developers and IT professionals. It objective is to provide
+organization to produce solutions and services faster, with higher quality 
+and lower costs. This methodology defines each part of the development 
+process to provide a well berder between what each developer should be doing
+so the product is center in a set of tasks isntead of allowing everyone work
+in everithing.
+
+DevOps consists in planning, coding, building, testing, release, deploy,
+operate and monitor a solution/software/servcie
+
+Docker helps to with the proces of deployment of a solution/software/servcie
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+---------------------------- Install ----------------------------
+-----------------------------------------------------------------
+
+Docker isntalation proceeds by downloading docker and installing it as a 
+normal package from your OS, nothing special here, unless youre in Linux
+
+The download link is placed below
+https://docs.docker.com/desktop/mac/install/
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+------------------------- Run and pull --------------------------
+-----------------------------------------------------------------
+
+Docker works under the IMAGE file format. Docker images act as a set of
+instructions to build a Docker container, like a template.
+
+(IMAGE = instructions
+CONTAINER = instance of an images execution)
+
+This images can be imported to a device using the 'docker pull [PACKAGE_NAME]'
+command from terminal. Once imported the image it can be runned by executing 
+the command 'docker run [PACKAGE_NAME]'. But if such image is not found 
+locally when using the run instruction it will automatically search for
+a such image name in https://hub.docker.com/ for such image, download it
+and run it in the PC. A version of an image can be specified by specifying
+a tag by using the following syntax:
+
+'docker tag <image> <newName>/<repoName>:<tagName>'
+
+If no tag specified Docker will download the lastest version of the image.
+Note that tags are version identification of an image
+
+Note that 'docker run' creates and executes a container
+
+Whenever different versions of an image are downloaded different 'layers' 
+that are compatible between images will be searched locally. If those layers
+already exist locally there will be downloaded only the missing layers for 
+the requested image.
+
+Whenever a Docker image is runned it might require the specification of a 
+few variables provided by the user. This environment variables required can
+be reviewed on the Docker hub tab called 'description' at the 'environment 
+variables' section. The execution of an image without this variables might 
+result in an error. To pass correctly this environment variables these have
+to be provided using the following syntax:
+
+docker run -d \
+	--name some-postgres \
+	-e POSTGRES_PASSWORD=mysecretpassword \
+	-e PGDATA=/var/lib/postgresql/data/pgdata \
+	-v /custom/mount:/var/lib/postgresql/data \
+	postgres
+
+Every environment variables are preceded by the '-e' flag.
+The '-d' flag allows to run the command in a second plane
+
+To check for locally stored folder there can be used the 'docker images' 
+command. It will display the following info:
+
+- Repository (name)
+- Tag (version name. If version is lastest the tag is 'lastest')
+- Image ID (SHA256 identidicator)
+- Created (time reference)
+- Size 
+
+To check for containers currently running there can be used the 'docker ps' 
+command. It will display the following info:
+
+- Container ID (first 10 values of the SHA256 identidicator)
+- Image (name of the container)
+- Command (the command that executed)
+- Created (time reference)
+- Status (provide info about how is executed)
+- Ports (port on which is served)
+- Names (container name)
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+------------------------------ Tag ------------------------------
+-----------------------------------------------------------------
+
+When running or pulling an image there can be provided a tag to specify the
+requested version of the image. An example is displayed below:
+
+docker run -d -e POSTGRES_PASSWORD=password postgres:bullseye
+
+Aside of the environment variables passed theres a tag to define the version
+and this is the 'bullseye' specification.
+
+Whenever an image is downloaded and a container is running it is running from 
+an isolated execution environment oblivious to other containers running from 
+their own isolated execution environments. Which means that a full catalog of
+softwares with their own dependencies can be running without raising conflics
+among them.
+
+In fact, the same container can be running in parallel without any conflict.
+
+To distinguish between several executions of the same container to control
+the execution of one from another from the 'docker ps' panel there can be 
+assingned a name to the execution of a container by unsing the following 
+syntax
+
+docker run -d -e POSTGRES_PASSWORD=password --name funny_cactus postgres:bullseye
+
+In this case, the instace that executes the postgres container, version 
+tagged bullseye is called 'funny_cactus'
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+---------------------- Removing containers ----------------------
+-----------------------------------------------------------------
+
+There are several status on which a container can be setted:
+
+- Up: Currently working or active
+- Exited: Not working or inactive
+
+When executing the 'docker ps' instruction there will be provided only the 
+info of the 'up' containers. To access all the containers there has to be
+provided the following command:
+
+'docker ps -a'
+
+Note that ps provides several paramters that are available in the link balow:
+
+https://docs.docker.com/engine/reference/commandline/ps/
+
+To remove a container there has to be used the following command:
+
+'docker rm [ID]' or  'docker rm [NAME]'
+
+To remove multiple containers there has be used the following command
+
+'docker rm [ID] [ID] [ID]' or 'docker rm [ID] [ID] [NAME]'
+
+Note that when triying to remove a running/active/up container Docker will 
+rise an error:
+
+'Error response from daemon:You cannot remove a running container [ID]
+container before attempting removal or force remove'
+
+This error can be avoided by either stopping a running container or by forcing
+containers removal
+
+To force a container removal there has to be used the following command
+
+'docker rm -f [ID]' (-f stands for force)
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+------------------------ Removing Images ------------------------
+-----------------------------------------------------------------
+
+To get the list of Docker's images there has to be executed the following 
+command:
+
+'docker images'
+
+This commando will return the following
+
+- Repository (name)
+- Tag (version name. If version is lastest the tag is 'lastest')
+- Image ID (SHA256 identidicator)
+- Created (time reference)
+- Size 
+
+To remove an image there has to be executed the following command:
+
+'docker rmi [ID]'
+
+Note that when triying to remove an image with a running/active/up container
+Docker will rise an error:
+
+This error can be avoided by either stopping a running container and then 
+removing the image or by forcing images removal
+
+To force a images removal there has to be used the following command
+
+'docker rmi -f [ID]' (-f stands for force)
+
+Note that images can inherit content from other images and thus both images 
+will display the same ID. In case is required to remove a particular image 
+with shared inheritance there has to be provided the repository name and the
+tag
+
+'docker rmi [REPOSITORY NAME]:[TAG]'
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+----------------------- Stop and Restart ------------------------
+-------------------------- containers ---------------------------
+-----------------------------------------------------------------
+
+Whenever a running container needs to be restarted there can be used the 
+following command:
+
+'docker restart [ID]'
+
+This instruction has an additional parameter which is the time before restar
+and is spacified by the '-t' name and its execution follows the next syntax
+
+'docker restart [ID] -t [NUMBER OF SECONDS]'
+
+If not specified the default NUMBER OF SECONDS is 10 seconds
+
+Whenever a running container needs to be stopped there can be used the 
+following command:
+
+'docker stop [ID]'
+
+Whenever a stopped container needs to be started there can be used the
+following command:
+
+'docker start [ID]'
+
+A stopped container has the 'Exited' status
+
+Stopped container can be removed without any error or 'forced' instruction.
+
+A image without running containers can be removed without any error or 
+'forced' instruction specification.
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+----------------------- Command execution -----------------------
+--------------------- on running containers ---------------------
+-----------------------------------------------------------------
+
+To execute a command within a running container there can used the following 
+command:
+
+'docker exec [OPTION] [ID] [COMMAND] [ARGUMENTS]'
+
+The list of options to run a command within a container can be found on the 
+link below
+
+https://docs.docker.com/engine/reference/commandline/exec/
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+---------------------- Visualize containers ---------------------
+------------------------------ log ------------------------------
+-----------------------------------------------------------------
+
+There can be seen running containers log by executing the following command:
+
+'docker logs -f [ID]'
+
+This instruction provides the info tha tthis container provides to the user.
+In the case of the '-f' parameter allows to follow every log output.
+
+There are several other parameters that can be seen in detail on the link 
+below
+
+https://docs.docker.com/engine/reference/commandline/logs/
+
+Logs can be provided with just a number of lines, between two timestamps,
+with or without timestamp info per log, etc.
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+--------------- Commands upon multiple containers ---------------
+-----------------------------------------------------------------
+
+Docker commands can be executed with filtering statements to allow
+a more flexible execution. This can be achieved using the following syntax:
+
+'docker rm $(docker ps --filter status=exited -q)'
+
+Note that the 'docker rm' recieves several IDs as arguments to remove those
+containers. To gather those containers theres a 'command substitution' $()
+which contains a docker command. This docker command 
+'docker ps --filter status=exited -q' gets a list of containers which status
+is exited, and, the paramter '-q' returns only the containers ID.
+
+HOW COOL IS THAT? - Is just too cool
+
+This flexibility can be applied to multiple scenarios where an action
+is meant to be executed upon different containers
+
+For instance, if required to delete several images these can be executed using
+'command substitution' statement 
+
+'dokcer rmi $(docker images)'
+
+This will erase all docker images
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+------------------- Search images by terminal -------------------
+-----------------------------------------------------------------
+
+Whenever is required to search an image there can be visited DockerHub and
+get the image name and make a send a pull request upon such image. 
+There's also a way to get such information by using the terminal and a few
+Docker commands
+
+This can be achieved by using the 'search' command sing the following syntax:
+
+docker search [IMAGE NAME]
+
+This command will return a table with the following information:
+
+- Name (Images with matching name)
+- Description (Basic/simple description of the image)
+- Stars (Community's rating in a number if stars)
+- Official (An '[OK]' or empty value)
+- Automated (An '[OK]' or empty value)
+
+This command can have several parameters tuned to provide a more precise 
+return. This parameters can be found in the following link
+
+https://docs.docker.com/engine/reference/commandline/search/
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+---------------------- Rename a container -----------------------
+-----------------------------------------------------------------
+
+A container name can be setted up any time. This is achieved any time by
+executing the following command:
+
+'docker rename [CURRENT CONTAINERS NAME] [NEW CONTAINERS NAME]'
+
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+------------------- Displaying system's info --------------------
+-----------------------------------------------------------------
+
+This is achieved by simply executing the following statement:
+
+'docker info'
+
+This provides a lot of data which can result useful to monitor system 
+variables, container status, number of images, containers an their status
+and so on
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+------------------- Saving an image as a ZIP --------------------
+----------------------------- file ------------------------------
+-----------------------------------------------------------------
+
+To save an image into a ZIP file there can be executed the following command
+
+docker save [IMAGE]:[TAG] | gzip > [FILENAME.tar.gz]
+
+In case there's required to save an image without being compressed there
+can be executed the following command:
+
+docker save [IMAGE]:[TAG] > [FILENAME.tar]
+
+To save file into an specified folder there has to be porvided a path where 
+such file is meant to be saved before the FILENAME as shown below
+
+docker save [IMAGE]:[TAG] > [PATH/FILENAME.tar] or
+docker save [IMAGE]:[TAG] | gzip > [PATH/FILENAME.tar.gz]
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+---------------- Import images from a compressed ----------------
+----------------------------- file ------------------------------
+-----------------------------------------------------------------
+
+To load a '.tar' file there can be used the following command
+
+docker load [PATH/FILENAME]
+
+In case there is meant to be loaded an image
+
+-----------------------------------------------------------------
+---------------------------- Docker -----------------------------
+------------------------ Docker's satats ------------------------
+-----------------------------------------------------------------
+
+To gather containers stats there can be used the following command:
+
+'docker stats'
+
+This commands shows a table with the following content:
+
+- CONTAINER ID
+- NAME (Containers name)
+- CPU % (CPUs usage)
+- MEM USAGE/LIMIT 
+- MEM %
+- NET I/O (Input and output in bytes)
+- BLOCK I/O
+- PIDS (Process/threads created by the container)
+
+Further specs can be setter fowllowing the instructions in the link below 
+such as format, and filters.
+
+https://docs.docker.com/engine/reference/commandline/stats/
